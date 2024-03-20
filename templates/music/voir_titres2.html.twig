@@ -1,0 +1,232 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        body {
+            background-image: url('{{ asset('images/music.jpeg') }}');
+            background-size: cover;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            color: white;
+            text-align: left;
+            margin-left: 10px;
+            margin-top: 100px;
+        }
+
+        .titre-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .titre-item img {
+            margin-right: 10px;
+        }
+
+        .titre-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nom-titre {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .dates-titre {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .artistes-titre {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .lien-titre {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .btn-voir-details {
+            background-color: white;
+            color: black;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            margin-top: 5px; 
+        }
+
+        ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        ul li {
+            margin-left: 10px;
+            color: white;
+        }
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px; /* Ajout d'une marge en bas pour séparer le titre du lien */
+            color: white;
+            text-align: center;
+        }
+
+        .custom-btn {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            background-color: transparent;
+            border: 2px solid gray;
+            border-radius: 5px;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .custom-btn:hover {
+            background-color: gray;
+            color: white;
+        }
+                h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .custom-btn {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .btn-ajouter,
+        .btn-retour {
+            background-color: gray;
+            border: 2px solid gray;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-ajouter:hover,
+        .btn-retour:hover {
+            background-color: darkgray; /* Couleur différente au survol */
+            color: white;
+        }
+
+        .artiste-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 2px solid lightcoral;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 400px;
+        }
+
+        .artiste-item img {
+            margin-right: 10px;
+        }
+
+        .artiste-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nom-artiste {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .dates-artiste {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-ajouter,
+        .btn-retour {
+            background-color: gray;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .btn-ajouter:hover,
+        .btn-retour:hover {
+            background-color: darkgray; 
+            color: white;
+        }
+                        .sign-out-container {
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background-color: #d9534f; 
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .sign-out-text {
+            color: white;
+            text-decoration: none; 
+            font-weight: bold; 
+        }
+
+        .sign-out-text:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <h1>Liste des titres</h1>
+
+    <ul>
+        {% for titre in listTitres %}
+            <li>
+                <div class="titre-item">
+                    {% if titre.logoFile is not null %}
+                        <img src="{{ vich_uploader_asset(titre, 'logoFile') }}" alt="Logo du titre" height="100">
+                    {% elseif titre.getImgtitre() is not null %}
+    <img src="{{ asset('images/titres/' ~ titre.getImgtitre()) }}" alt="image de titre" height="100">
+                    {% endif %}
+                    <div class="titre-info">
+                        <span class="nom-titre">{{ titre.nomtitre }}</span>
+                        {% if titre.date is not null %}
+                            <span class="dates-titre">Date de sortie: {{ titre.date|date('Y-m-d') }}</span>
+                        {% endif %}
+                        <span class="artistes-titre">Artistes: 
+                            {% for artiste in titre.artiste %}
+                                {{ artiste.nomartiste }}
+                                {% if not loop.last %}, {% endif %}
+                            {% endfor %}
+                        </span>
+                        <span class="lien-titre">Lien: <a href="{{ titre.lien }}" target="_blank">{{ titre.lien }}</a></span>
+
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+        <div class="sign-out-container">
+        <a href="{{ path('security_logout') }}" class="sign-out-text">Sign Out</a>
+    </div>
+{% endblock %}

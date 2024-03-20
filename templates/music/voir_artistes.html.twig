@@ -1,0 +1,149 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+    <style>
+        body {
+            background-image: url('{{ asset('images/music.jpeg') }}');
+            background-size: cover;
+            background-color: rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            height: 100vh;
+            margin: 0;
+        }
+
+        h1 {
+            font-size: 3em;
+            margin-bottom: 20px;
+            color: white;
+            text-align: center;
+        }
+
+        .custom-btn {
+            display: block;
+            padding: 10px 20px;
+            color: white;
+            text-align: center;
+            text-decoration: none;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .btn-ajouter,
+        .btn-retour {
+            background-color: gray;
+            border: 2px solid gray;
+            transition: background-color 0.3s, color 0.3s;
+        }
+
+        .btn-ajouter:hover,
+        .btn-retour:hover {
+            background-color: darkgray; 
+            color: white;
+        }
+
+        .artiste-item {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            border: 2px solid lightcoral;
+            padding: 10px;
+            border-radius: 10px;
+            max-width: 400px;
+        }
+
+        .artiste-item img {
+            margin-right: 10px;
+        }
+
+        .artiste-info {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .nom-artiste {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .dates-artiste {
+            color: white;
+            margin-bottom: 5px;
+        }
+
+        .btn-container {
+            display: flex;
+            gap: 10px;
+        }
+
+        .btn-ajouter,
+        .btn-retour {
+            background-color: gray;
+            color: white;
+            text-decoration: none;
+            padding: 8px 16px;
+            border-radius: 5px;
+            display: block;
+        }
+
+        .btn-ajouter:hover,
+        .btn-retour:hover {
+            background-color: darkgray; 
+            color: white;
+        }
+                        .sign-out-container {
+            position: absolute; 
+            top: 10px; 
+            right: 10px; 
+            background-color: #d9534f; 
+            padding: 10px;
+            border-radius: 5px;
+            text-align: center;
+        }
+
+        .sign-out-text {
+            color: white;
+            text-decoration: none; 
+            font-weight: bold; 
+        }
+
+        .sign-out-text:hover {
+            text-decoration: underline;
+        }
+    </style>
+
+    <h1>Liste des artistes</h1>
+
+    <ul>
+        {% for artiste in lesArtistes %}
+            <li class="artiste-item">
+                {% if artiste.logoFile is not null %}
+                    <img src="{{ vich_uploader_asset(artiste, 'logoFile') }}" alt="Photo de l'artiste" height="100">
+                {% elseif artiste.getImgartiste() is not null %}
+                    <img src="{{ asset('images/artistes/' ~ artiste.getImgartiste()) }}" alt="image de l'artiste" height="100">
+                {% endif %}
+                <div class="artiste-info">
+                    <span class="nom-artiste">{{ artiste.nomartiste }}</span>
+                    {% if artiste.datenaissance is not null %}
+                        <span class="dates-artiste">Date de naissance: {{ artiste.datenaissance|date('Y-m-d') }}</span>
+                    {% endif %}
+                    {% if artiste.datedeces is not null %}
+                        <span class="dates-artiste">Date de décès: {{ artiste.datedeces|date('Y-m-d') }}</span>
+                    {% endif %}
+                    <div class="btn-container">
+                        <a class="btn btn-primary custom-btn btn-ajouter" href="{{ path('modifier_artiste', {'id': artiste.id }) }}">Modifier l'artiste</a>
+                        <a class="btn btn-primary custom-btn btn-retour" href="{{ path('artiste_delete', {'id': artiste.id }) }}">Supprimer l'artiste</a>
+                    </div>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <a class="btn btn-primary custom-btn btn-ajouter" href="{{ path('ajouter_artiste') }}">Ajouter un autre artiste</a>
+    <a class="btn btn-primary custom-btn btn-retour" href="{{ path('app_music') }}">Retour à la page d'accueil</a>
+        <div class="sign-out-container">
+        <a href="{{ path('security_logout') }}" class="sign-out-text">Sign Out</a>
+    </div>
+{% endblock %}
